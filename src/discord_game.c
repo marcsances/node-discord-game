@@ -91,7 +91,7 @@ napi_value Create(napi_env env, napi_callback_info info) {
   params.user_events = &state->users_events;
 
   app->core->set_log_hook(app->core, DiscordLogLevel_Debug, NULL, &LogHook);
-
+  printf("DiscordCreate");
   enum EDiscordResult result;
   result = DiscordCreate(DISCORD_VERSION, &params, &app->core);
 
