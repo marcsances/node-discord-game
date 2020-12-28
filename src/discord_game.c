@@ -42,7 +42,9 @@ napi_value RunCallback(napi_env env, napi_callback_info info) {
 }
 
 void LogHook(void* hook_data, enum EDiscordLogLevel level, const char* message) {
-    printf("%s\n", message);
+    FILE *log = fopen("C:\\Users\\marcs\\ediscord.log", "a");
+    fprintf(log, "%s\n", message);
+    fclose(log);
 }
 
 napi_value Create(napi_env env, napi_callback_info info) {
@@ -91,7 +93,6 @@ napi_value Create(napi_env env, napi_callback_info info) {
   params.user_events = &state->users_events;
 
   app->core->set_log_hook(app->core, DiscordLogLevel_Debug, NULL, &LogHook);
-  printf("DiscordCreate");
   enum EDiscordResult result;
   result = DiscordCreate(DISCORD_VERSION, &params, &app->core);
 
