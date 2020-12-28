@@ -1,4 +1,5 @@
 #include "discord_game.h"
+#include <stdio.h>
 
 static void Destroy(napi_env env, void* data, void* hint) {
   if (!data) {
@@ -38,6 +39,10 @@ napi_value RunCallback(napi_env env, napi_callback_info info) {
 
   NAPI_REQUIRE(napi_get_boolean(env, true, &ret));
   return ret;
+}
+
+void LogHook(void* hook_data, enum EDiscordLogLevel level, const char* message) {
+    printf("%s\n", message);
 }
 
 napi_value Create(napi_env env, napi_callback_info info) {
@@ -84,6 +89,8 @@ napi_value Create(napi_env env, napi_callback_info info) {
   params.activity_events = &state->activities_events;
   params.relationship_events = &state->relationships_events;
   params.user_events = &state->users_events;
+
+  app->core->set_log_hook(app->core, DiscordLogLevel_Debug, NULL, &LogHook);
 
   enum EDiscordResult result;
   result = DiscordCreate(DISCORD_VERSION, &params, &app->core);
